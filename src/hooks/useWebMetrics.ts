@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { enviarNotificacionTelegram, enviarBeaconTelegram } from '../services/telegramService';
+import { fetchVisitCount } from '../services/visitCounter';
 
 export const useWebMetrics = () => {
   const startTimeRef = useRef<number>(Date.now());
@@ -7,6 +8,7 @@ export const useWebMetrics = () => {
     ubicacion: 'Desconocida o filtrada',
     visitaNro: 'N/A',
   });
+  const [visitCount, setVisitCount] = useState('1');
 
   useEffect(() => {
     startTimeRef.current = Date.now();
@@ -16,17 +18,19 @@ export const useWebMetrics = () => {
         const ipRes = await fetch('https://ipapi.co/json/');
         const ipData = await ipRes.json();
 
-        const countRes = await fetch('https://api.countapi.xyz/hit/vexora-ai-portfolio/visits');
-        const countData = await countRes.json();
+        const countValue = await fetchVisitCount();
+        const visitNumber = String(countValue || '1');
 
         sessionInfoRef.current = {
           ubicacion: `📍 ${ipData.city || 'Desconocida'}, ${ipData.country_name || 'País no disponible'}`,
-          visitaNro: String(countData.value || '1'),
+          visitaNro: visitNumber,
         };
+
+        setVisitCount(visitNumber);
 
         const mensajeEntrada = `
 🌐 *VEXOR AI - NUEVO VISITANTE EN LA WEB*
-🔢 Visita acumulada Nº: *${sessionInfoRef.current.visitaNro}*
+🔢 Visita acumulada Nº: *${visitNumber}*
 🗺️ Ubicación: ${sessionInfoRef.current.ubicacion}
 ⏰ Hora de entrada: ${new Date().toLocaleTimeString()}
         `.trim();
@@ -34,6 +38,7 @@ export const useWebMetrics = () => {
         await enviarNotificacionTelegram(mensajeEntrada);
       } catch (error) {
         console.error('No se pudo registrar la entrada web:', error);
+        setVisitCount('1');
         await enviarNotificacionTelegram(`🌐 *VEXOR AI - NUEVO VISITANTE*\n🗺️ Ubicación/Contador: No disponible (AdBlock o bloqueo de red)`);
       }
     };
@@ -64,4 +69,9 @@ export const useWebMetrics = () => {
       window.removeEventListener('pagehide', registrarSalida);
     };
   }, []);
+
+  return {
+    visitCount,
+    ubicacion: sessionInfoRef.current.ubicacion,
+  };
 };

@@ -91,8 +91,7 @@ export default function App() {
     mensaje: '',
   });
   const { enviarMensajeFormulario, loading, success } = useContacto();
-
-  useWebMetrics();
+  const { visitCount } = useWebMetrics();
 
   useEffect(() => {
     if (showSplash) return;
@@ -164,32 +163,37 @@ export default function App() {
                   <h1 className="page-title">VexoraIA - Automatización Ejecutiva con IA</h1>
                 </div>
 
-              <div className="cv-panel">
-                <div>
-                  <p className="cv-intro">
-                    En VEXORAI llevamos tu empresa al siguiente nivel tecnológico:
-                  </p>
-                  <ul className="cv-list compact-list">
-                    <li>Software a medida: Sistemas POS, web y escritorio.</li>
-                    <li>Inteligencia Artificial: Automatización de procesos.</li>
-                    <li>Sistemas de gestión: ERP y CRM para inventario y clientes.</li>
-                  </ul>
-                  <p className="cv-intro highlight-intro">
-                    Conectamos empresas.
-                  </p>
-                  <p className="cv-intro">
-                    Diseñamos e implementamos infraestructura digital de alto rendimiento para empresas en crecimiento. Convertimos procesos operativos lentos en ecosistemas automatizados, rentables y 100% escalables.
-                  </p>
+                <div className="visit-counter" aria-live="polite">
+                  <span className="eyebrow">Visitas registradas</span>
+                  <strong>{visitCount}</strong>
                 </div>
 
-                <div className="mission-box">
-                  <h3>Misión</h3>
-                  <blockquote>
-                    “Diseñar, desarrollar e implementar ecosistemas de software, inteligencia artificial e infraestructura digital de alto rendimiento para empresas en crecimiento. Nos enfocamos en transformar procesos operativos complejos y repetitivos en sistemas automatizados, eficientes y escalables, impulsando la rentabilidad y la competitividad de nuestros clientes mediante soluciones tecnológicas innovadoras y a medida.”
-                  </blockquote>
+                <div className="cv-panel">
+                  <div>
+                    <p className="cv-intro">
+                      En VEXORAI llevamos tu empresa al siguiente nivel tecnológico:
+                    </p>
+                    <ul className="cv-list compact-list">
+                      <li>Software a medida: Sistemas POS, web y escritorio.</li>
+                      <li>Inteligencia Artificial: Automatización de procesos.</li>
+                      <li>Sistemas de gestión: ERP y CRM para inventario y clientes.</li>
+                    </ul>
+                    <p className="cv-intro highlight-intro">
+                      Conectamos empresas.
+                    </p>
+                    <p className="cv-intro">
+                      Diseñamos e implementamos infraestructura digital de alto rendimiento para empresas en crecimiento. Convertimos procesos operativos lentos en ecosistemas automatizados, rentables y 100% escalables.
+                    </p>
+                  </div>
+
+                  <div className="mission-box">
+                    <h3>Misión</h3>
+                    <blockquote>
+                      “Diseñar, desarrollar e implementar ecosistemas de software, inteligencia artificial e infraestructura digital de alto rendimiento para empresas en crecimiento. Nos enfocamos en transformar procesos operativos complejos y repetitivos en sistemas automatizados, eficientes y escalables, impulsando la rentabilidad y la competitividad de nuestros clientes mediante soluciones tecnológicas innovadoras y a medida.”
+                    </blockquote>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
             <section id="proyectos" className="info-section" aria-label="Sección de proyectos">
               <div className="section-header">
