@@ -91,7 +91,7 @@ export default function App() {
     mensaje: '',
   });
   const { enviarMensajeFormulario, loading, success } = useContacto();
-  const { visitCount } = useWebMetrics();
+  useWebMetrics();
 
   useEffect(() => {
     if (showSplash) return;
@@ -161,11 +161,6 @@ export default function App() {
                 <div className="section-header">
                   <span className="eyebrow">VEXORAI</span>
                   <h1 className="page-title">VexoraIA - Automatización Ejecutiva con IA</h1>
-                </div>
-
-                <div className="visit-counter" aria-live="polite">
-                  <span className="eyebrow">Visitas registradas</span>
-                  <strong>{visitCount}</strong>
                 </div>
 
                 <div className="cv-panel">

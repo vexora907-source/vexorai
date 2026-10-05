@@ -27,7 +27,6 @@ vi.mock('./features/contacto/hooks/useContacto', () => ({
 
 vi.mock('./hooks/useWebMetrics', () => ({
   useWebMetrics: () => ({
-    visitCount: '42',
     ubicacion: 'Bogotá, Colombia',
   }),
 }));

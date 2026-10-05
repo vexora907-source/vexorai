@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { enviarNotificacionTelegram, enviarBeaconTelegram } from '../services/telegramService';
 import { fetchVisitCount } from '../services/visitCounter';
 
@@ -8,7 +8,6 @@ export const useWebMetrics = () => {
     ubicacion: 'Desconocida o filtrada',
     visitaNro: 'N/A',
   });
-  const [visitCount, setVisitCount] = useState('1');
 
   useEffect(() => {
     startTimeRef.current = Date.now();
@@ -26,8 +25,6 @@ export const useWebMetrics = () => {
           visitaNro: visitNumber,
         };
 
-        setVisitCount(visitNumber);
-
         const mensajeEntrada = `
 🌐 *VEXOR AI - NUEVO VISITANTE EN LA WEB*
 🔢 Visita acumulada Nº: *${visitNumber}*
@@ -38,7 +35,6 @@ export const useWebMetrics = () => {
         await enviarNotificacionTelegram(mensajeEntrada);
       } catch (error) {
         console.error('No se pudo registrar la entrada web:', error);
-        setVisitCount('1');
         await enviarNotificacionTelegram(`🌐 *VEXOR AI - NUEVO VISITANTE*\n🗺️ Ubicación/Contador: No disponible (AdBlock o bloqueo de red)`);
       }
     };
@@ -71,7 +67,6 @@ export const useWebMetrics = () => {
   }, []);
 
   return {
-    visitCount,
     ubicacion: sessionInfoRef.current.ubicacion,
   };
 };
