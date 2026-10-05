@@ -1,6 +1,12 @@
+# Exclude the Tauri desktop app from Vercel deployments.
+# Vercel should only build the web frontend, not the Rust desktop binary.
 src-tauri/
 src-tauri/**
+src-tauri-backup/
+src-tauri-backup/**
 Cargo.toml
 Cargo.lock
 **/*.rs
 **/*.toml
+tauri.conf.json
+**/tauri.conf.json
