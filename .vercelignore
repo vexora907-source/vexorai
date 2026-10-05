@@ -1,0 +1,6 @@
+src-tauri/
+src-tauri/**
+Cargo.toml
+Cargo.lock
+**/*.rs
+**/*.toml
