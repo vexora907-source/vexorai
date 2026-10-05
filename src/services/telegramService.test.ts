@@ -4,8 +4,8 @@ import { buildTelegramPayload, getTelegramConfig } from './telegramService';
 describe('telegramService config', () => {
   it('uses the internal proxy endpoint required in production', () => {
     const config = getTelegramConfig({
-      VITE_TELEGRAM_BOT_TOKEN: 'token123',
-      VITE_TELEGRAM_CHAT_ID: 'chat456',
+      TELEGRAM_BOT_TOKEN: 'token123',
+      TELEGRAM_CHAT_ID: 'chat456',
     });
 
     expect(config).toEqual({
@@ -13,6 +13,12 @@ describe('telegramService config', () => {
       chatId: 'chat456',
       apiUrl: '/api/telegram',
     });
+  });
+
+  it('returns null when the production Telegram variables are not configured', () => {
+    const config = getTelegramConfig({});
+
+    expect(config).toBeNull();
   });
 
   it('builds a payload that can be sent to the proxy', () => {

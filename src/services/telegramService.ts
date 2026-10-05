@@ -9,8 +9,13 @@ export type TelegramConfig = {
 export function getTelegramConfig(
   env: TelegramEnvValues | Record<string, string | undefined> = import.meta.env as Record<string, string | undefined>
 ): TelegramConfig | null {
-  const botToken = (env.TELEGRAM_BOT_TOKEN ?? env.VITE_TELEGRAM_BOT_TOKEN ?? '').trim();
-  const chatId = (env.TELEGRAM_CHAT_ID ?? env.VITE_TELEGRAM_CHAT_ID ?? '').trim();
+  const useLocalFallback = !!import.meta.env.DEV;
+  const botToken = (env.TELEGRAM_BOT_TOKEN ?? (useLocalFallback ? env.VITE_TELEGRAM_BOT_TOKEN : '') ?? '').trim();
+  const chatId = (env.TELEGRAM_CHAT_ID ?? (useLocalFallback ? env.VITE_TELEGRAM_CHAT_ID : '') ?? '').trim();
+
+  if (!botToken || !chatId) {
+    return null;
+  }
 
   return {
     botToken,
@@ -26,7 +31,9 @@ export function buildTelegramPayload(texto: string, chatId?: string) {
   };
 }
 
-export const isTelegramConfigured = true;
+export const isTelegramConfigured = Boolean(
+  import.meta.env.TELEGRAM_BOT_TOKEN || import.meta.env.TELEGRAM_CHAT_ID
+);
 
 const getConfiguredTelegramConfig = (): TelegramConfig | null => {
   const config = getTelegramConfig();
