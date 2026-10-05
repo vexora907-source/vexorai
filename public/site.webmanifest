@@ -1,0 +1,13 @@
+{
+  "name": "VexoraIA | Automatización Ejecutiva con IA",
+  "short_name": "VexoraIA",
+  "description": "Automatización ejecutiva con IA, consultoría digital y portafolios web premium para empresas en Colombia y el exterior.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020817",
+  "theme_color": "#0f172a",
+  "icons": [
+    { "src": "/logo-Vexor.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/logo-Vexor.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

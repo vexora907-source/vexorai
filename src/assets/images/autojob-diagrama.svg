@@ -1,0 +1,78 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" fill="#EEE8DF"/>
+  <g opacity="0.9">
+    <rect x="100" y="210" width="220" height="120" rx="22" fill="#F1F5F9" stroke="#1F2937" stroke-width="4"/>
+    <rect x="140" y="250" width="140" height="42" rx="10" fill="#5BC0BE"/>
+    <text x="210" y="277" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0F172A">CV.pdf</text>
+    <text x="210" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#0F172A">VALIDATION &amp; IMPORT</text>
+  </g>
+
+  <g>
+    <rect x="410" y="140" width="230" height="120" rx="20" fill="#D7F3F2" stroke="#1F2937" stroke-width="4"/>
+    <text x="525" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0F172A">JOB</text>
+    <text x="525" y="196" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0F172A">VACANCY</text>
+    <text x="525" y="222" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#0F172A">SEARCH</text>
+    <circle cx="760" cy="200" r="18" fill="#F59E0B" stroke="#1F2937" stroke-width="3"/>
+    <path d="M740 200H780" stroke="#1F2937" stroke-width="4" stroke-linecap="round"/>
+    <path d="M760 180V220" stroke="#1F2937" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <g>
+    <rect x="760" y="140" width="320" height="120" rx="24" fill="#DCE7F7" stroke="#1F2937" stroke-width="4"/>
+    <text x="920" y="198" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#0F172A">AUTOJOB</text>
+    <text x="920" y="232" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#0F172A">AUTOMATION PIPELINE</text>
+  </g>
+
+  <g>
+    <rect x="760" y="320" width="240" height="120" rx="22" fill="#E0F2FE" stroke="#1F2937" stroke-width="4"/>
+    <text x="880" y="374" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">CONTACT</text>
+    <text x="880" y="398" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">EMAIL</text>
+    <text x="880" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#0F172A">EXTRACTION</text>
+  </g>
+
+  <g>
+    <rect x="980" y="320" width="200" height="120" rx="22" fill="#E0F2FE" stroke="#1F2937" stroke-width="4"/>
+    <text x="1080" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">DUPLICATE</text>
+    <text x="1080" y="394" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">CHECK</text>
+  </g>
+
+  <g>
+    <rect x="120" y="430" width="200" height="140" rx="18" fill="#E2F3E2" stroke="#1F2937" stroke-width="4"/>
+    <text x="220" y="490" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">VALIDATION</text>
+    <text x="220" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">&amp; IMPORT</text>
+    <text x="220" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#0F172A">Check for CV.pdf</text>
+  </g>
+
+  <g>
+    <rect x="420" y="430" width="220" height="150" rx="18" fill="#E5F4FF" stroke="#1F2937" stroke-width="4"/>
+    <text x="530" y="483" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">AUTOMATED</text>
+    <text x="530" y="510" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">EMAIL SENDING</text>
+    <text x="530" y="536" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#0F172A">desde tu propio correo</text>
+  </g>
+
+  <g>
+    <rect x="760" y="500" width="310" height="120" rx="18" fill="#E5F4FF" stroke="#1F2937" stroke-width="4"/>
+    <text x="915" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0F172A">NOTIFICATIONS</text>
+    <text x="915" y="584" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#0F172A">CV enviado / empresa / fecha</text>
+  </g>
+
+  <g stroke="#1F2937" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320 270H410" fill="none"/>
+    <path d="M640 200H760" fill="none"/>
+    <path d="M880 260V320" fill="none"/>
+    <path d="M1080 260V320" fill="none"/>
+    <path d="M220 330V430" fill="none"/>
+    <path d="M530 260V430" fill="none"/>
+    <path d="M530 580V620H260V590" fill="none"/>
+    <path d="M640 520H760" fill="none"/>
+    <path d="M1080 440V500" fill="none"/>
+  </g>
+
+  <g fill="#0F172A" font-family="Arial, sans-serif" font-size="16" font-weight="700">
+    <text x="650" y="190">Search</text>
+    <text x="900" y="290">Contact</text>
+    <text x="214" y="402">CV</text>
+    <text x="516" y="404">Email</text>
+    <text x="903" y="470">Check</text>
+  </g>
+</svg>

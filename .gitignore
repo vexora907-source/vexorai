@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.env
+.DS_Store
+.vscode/
+.idea/
+public/manifest.json
+*.log
+coverage/
+.vite/
+
+# Tauri build artifacts
+src-tauri/target/
+
+# local env
+.env.local
+.env.*.local
