@@ -1,24 +1,59 @@
-const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '';
-const MY_PERSONAL_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID || '';
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+export type TelegramEnvValues = Partial<Record<'VITE_TELEGRAM_BOT_TOKEN' | 'VITE_TELEGRAM_CHAT_ID', string>>;
 
-export const isTelegramConfigured = Boolean(TELEGRAM_BOT_TOKEN && MY_PERSONAL_CHAT_ID);
+export type TelegramConfig = {
+  botToken: string;
+  chatId: string;
+  apiUrl: string;
+};
+
+export function getTelegramConfig(env: TelegramEnvValues = import.meta.env): TelegramConfig | null {
+  const botToken = (env.VITE_TELEGRAM_BOT_TOKEN ?? '').trim();
+  const chatId = (env.VITE_TELEGRAM_CHAT_ID ?? '').trim();
+
+  if (!botToken || !chatId) {
+    return null;
+  }
+
+  return {
+    botToken,
+    chatId,
+    apiUrl: `https://api.telegram.org/bot${botToken}/sendMessage`,
+  };
+}
+
+export function buildTelegramPayload(texto: string, chatId: string) {
+  return {
+    chat_id: chatId,
+    text: texto,
+  };
+}
+
+export const isTelegramConfigured = Boolean(getTelegramConfig());
+
+const getConfiguredTelegramConfig = (): TelegramConfig | null => {
+  const config = getTelegramConfig();
+
+  if (!config) {
+    console.warn(
+      'Telegram no está configurado. Define VITE_TELEGRAM_BOT_TOKEN y VITE_TELEGRAM_CHAT_ID en Vercel o en tu archivo .env.local.'
+    );
+  }
+
+  return config;
+};
 
 export const enviarNotificacionTelegram = async (texto: string): Promise<boolean> => {
-  if (!isTelegramConfigured) {
-    console.warn('Telegram no está configurado. Define VITE_TELEGRAM_BOT_TOKEN y VITE_TELEGRAM_CHAT_ID.');
+  const config = getConfiguredTelegramConfig();
+
+  if (!config) {
     return false;
   }
 
   try {
-    const response = await fetch(TELEGRAM_API_URL, {
+    const response = await fetch(config.apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: MY_PERSONAL_CHAT_ID,
-        text: texto,
-        parse_mode: 'Markdown',
-      }),
+      body: JSON.stringify(buildTelegramPayload(texto, config.chatId)),
     });
 
     if (!response.ok) {
@@ -35,25 +70,23 @@ export const enviarNotificacionTelegram = async (texto: string): Promise<boolean
 };
 
 export const enviarBeaconTelegram = (texto: string): void => {
-  if (!isTelegramConfigured) {
+  const config = getConfiguredTelegramConfig();
+
+  if (!config) {
     return;
   }
 
-  const payload = JSON.stringify({
-    chat_id: MY_PERSONAL_CHAT_ID,
-    text: texto,
-    parse_mode: 'Markdown',
-  });
+  const payload = JSON.stringify(buildTelegramPayload(texto, config.chatId));
 
   if (navigator.sendBeacon) {
     navigator.sendBeacon(
-      TELEGRAM_API_URL,
+      config.apiUrl,
       new Blob([payload], { type: 'application/json' })
     );
     return;
   }
 
-  fetch(TELEGRAM_API_URL, {
+  fetch(config.apiUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: payload,
