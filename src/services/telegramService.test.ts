@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildTelegramPayload, getTelegramConfig } from './telegramService';
 
 describe('telegramService config', () => {
-  it('resolves environment variables from Vite env values', () => {
+  it('uses the internal proxy endpoint required in production', () => {
     const config = getTelegramConfig({
       VITE_TELEGRAM_BOT_TOKEN: 'token123',
       VITE_TELEGRAM_CHAT_ID: 'chat456',
@@ -11,11 +11,11 @@ describe('telegramService config', () => {
     expect(config).toEqual({
       botToken: 'token123',
       chatId: 'chat456',
-      apiUrl: 'https://api.telegram.org/bottoken123/sendMessage',
+      apiUrl: '/api/telegram',
     });
   });
 
-  it('builds a safe payload without markdown formatting issues', () => {
+  it('builds a payload that can be sent to the proxy', () => {
     const payload = buildTelegramPayload('Hola *mundo*', 'chat456');
 
     expect(payload).toMatchObject({

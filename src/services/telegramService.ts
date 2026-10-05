@@ -1,4 +1,4 @@
-export type TelegramEnvValues = Partial<Record<'VITE_TELEGRAM_BOT_TOKEN' | 'VITE_TELEGRAM_CHAT_ID', string>>;
+export type TelegramEnvValues = Partial<Record<'VITE_TELEGRAM_BOT_TOKEN' | 'VITE_TELEGRAM_CHAT_ID' | 'TELEGRAM_BOT_TOKEN' | 'TELEGRAM_CHAT_ID', string>>;
 
 export type TelegramConfig = {
   botToken: string;
@@ -6,36 +6,34 @@ export type TelegramConfig = {
   apiUrl: string;
 };
 
-export function getTelegramConfig(env: TelegramEnvValues = import.meta.env): TelegramConfig | null {
-  const botToken = (env.VITE_TELEGRAM_BOT_TOKEN ?? '').trim();
-  const chatId = (env.VITE_TELEGRAM_CHAT_ID ?? '').trim();
-
-  if (!botToken || !chatId) {
-    return null;
-  }
+export function getTelegramConfig(
+  env: TelegramEnvValues | Record<string, string | undefined> = import.meta.env as Record<string, string | undefined>
+): TelegramConfig | null {
+  const botToken = (env.TELEGRAM_BOT_TOKEN ?? env.VITE_TELEGRAM_BOT_TOKEN ?? '').trim();
+  const chatId = (env.TELEGRAM_CHAT_ID ?? env.VITE_TELEGRAM_CHAT_ID ?? '').trim();
 
   return {
     botToken,
     chatId,
-    apiUrl: `https://api.telegram.org/bot${botToken}/sendMessage`,
+    apiUrl: '/api/telegram',
   };
 }
 
-export function buildTelegramPayload(texto: string, chatId: string) {
+export function buildTelegramPayload(texto: string, chatId?: string) {
   return {
-    chat_id: chatId,
+    ...(chatId ? { chat_id: chatId } : {}),
     text: texto,
   };
 }
 
-export const isTelegramConfigured = Boolean(getTelegramConfig());
+export const isTelegramConfigured = true;
 
 const getConfiguredTelegramConfig = (): TelegramConfig | null => {
   const config = getTelegramConfig();
 
   if (!config) {
     console.warn(
-      'Telegram no está configurado. Define VITE_TELEGRAM_BOT_TOKEN y VITE_TELEGRAM_CHAT_ID en Vercel o en tu archivo .env.local.'
+      'Telegram no está configurado. Define TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID en Vercel o usa los valores locales para desarrollo.'
     );
   }
 
@@ -64,7 +62,7 @@ export const enviarNotificacionTelegram = async (texto: string): Promise<boolean
 
     return true;
   } catch (error) {
-    console.error('Error al conectar con la API de Telegram:', error);
+    console.error('Error al conectar con la API interna de Telegram:', error);
     return false;
   }
 };
