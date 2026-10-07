@@ -6,40 +6,46 @@ export const useWebMetrics = () => {
   const startTimeRef = useRef<number>(Date.now());
   const sessionInfoRef = useRef<{ ubicacion: string; visitaNro: string }>({
     ubicacion: 'Desconocida o filtrada',
-    visitaNro: 'N/A',
+    visitaNro: 'No disponible',
   });
 
   useEffect(() => {
     startTimeRef.current = Date.now();
 
+    const numeroVisitaPromise = fetchVisitCount().then((countValue) => {
+      const visitNumber = String(countValue || '1');
+      sessionInfoRef.current.visitaNro = visitNumber;
+      return visitNumber;
+    });
+
+    const ubicacionPromise = fetch('https://ipapi.co/json/')
+      .then((response) => response.json())
+      .then((ipData) => `📍 ${ipData.city || 'Desconocida'}, ${ipData.country_name || 'País no disponible'}`)
+      .catch((error) => {
+        console.error('No se pudo obtener la ubicación del visitante:', error);
+        return 'Desconocida o filtrada';
+      });
+
     const registrarEntrada = async () => {
-      try {
-        const ipRes = await fetch('https://ipapi.co/json/');
-        const ipData = await ipRes.json();
+      const [visitNumber, ubicacion] = await Promise.all([numeroVisitaPromise, ubicacionPromise]);
 
-        const countValue = await fetchVisitCount();
-        const visitNumber = String(countValue || '1');
+      sessionInfoRef.current = { ubicacion, visitaNro: visitNumber };
 
-        sessionInfoRef.current = {
-          ubicacion: `📍 ${ipData.city || 'Desconocida'}, ${ipData.country_name || 'País no disponible'}`,
-          visitaNro: visitNumber,
-        };
-
-        const mensajeEntrada = `
+      const mensajeEntrada = `
 🌐 *VEXOR AI - NUEVO VISITANTE EN LA WEB*
 🔢 Visita acumulada Nº: *${visitNumber}*
 🗺️ Ubicación: ${sessionInfoRef.current.ubicacion}
 ⏰ Hora de entrada: ${new Date().toLocaleTimeString()}
         `.trim();
 
-        await enviarNotificacionTelegram(mensajeEntrada);
-      } catch (error) {
-        console.error('No se pudo registrar la entrada web:', error);
-        await enviarNotificacionTelegram(`🌐 *VEXOR AI - NUEVO VISITANTE*\n🗺️ Ubicación/Contador: No disponible (AdBlock o bloqueo de red)`);
-      }
+      await enviarNotificacionTelegram(mensajeEntrada);
     };
 
+    let salidaRegistrada = false;
     const registrarSalida = () => {
+      if (salidaRegistrada) return;
+      salidaRegistrada = true;
+
       const totalMili = Date.now() - startTimeRef.current;
       const minutos = Math.floor(totalMili / 60000);
       const segundos = ((totalMili % 60000) / 1000).toFixed(0);
