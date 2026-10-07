@@ -6,12 +6,8 @@ export default async function handler(req: any, res: any) {
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body ?? {};
     const text = typeof body.text === 'string' ? body.text.trim() : '';
-    const chatId =
-      (typeof body.chat_id === 'string' && body.chat_id.trim()) ||
-      process.env.TELEGRAM_CHAT_ID ||
-      process.env.VITE_TELEGRAM_CHAT_ID ||
-      '';
-    const botToken = process.env.TELEGRAM_BOT_TOKEN || process.env.VITE_TELEGRAM_BOT_TOKEN || '';
+    const chatId = process.env.TELEGRAM_CHAT_ID || '';
+    const botToken = process.env.TELEGRAM_BOT_TOKEN || '';
 
     if (!botToken) {
       return res.status(500).json({ ok: false, error: 'Missing TELEGRAM_BOT_TOKEN in Vercel environment variables.' });

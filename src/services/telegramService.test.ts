@@ -1,33 +1,35 @@
-import { describe, expect, it } from 'vitest';
-import { buildTelegramPayload, getTelegramConfig } from './telegramService';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { buildTelegramPayload, enviarNotificacionTelegram } from './telegramService';
 
-describe('telegramService config', () => {
-  it('uses the internal proxy endpoint required in production', () => {
-    const config = getTelegramConfig({
-      TELEGRAM_BOT_TOKEN: 'token123',
-      TELEGRAM_CHAT_ID: 'chat456',
-    });
+describe('telegramService', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-    expect(config).toEqual({
-      botToken: 'token123',
-      chatId: 'chat456',
-      apiUrl: '/api/telegram',
+  it('sends messages to the server-side Telegram proxy without exposing credentials', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), { status: 200 })
+    );
+
+    await expect(enviarNotificacionTelegram('Hola Telegram')).resolves.toBe(true);
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/telegram', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: 'Hola Telegram' }),
     });
   });
 
-  it('returns null when the production Telegram variables are not configured', () => {
-    const config = getTelegramConfig({});
+  it('returns false when the proxy rejects the message', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response('Telegram rejected the message', { status: 500 })
+    );
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
-    expect(config).toBeNull();
+    await expect(enviarNotificacionTelegram('Hola Telegram')).resolves.toBe(false);
   });
 
-  it('builds a payload that can be sent to the proxy', () => {
-    const payload = buildTelegramPayload('Hola *mundo*', 'chat456');
-
-    expect(payload).toMatchObject({
-      chat_id: 'chat456',
-      text: 'Hola *mundo*',
-    });
-    expect(payload).not.toHaveProperty('parse_mode');
+  it('builds a text-only payload for the proxy', () => {
+    expect(buildTelegramPayload('Hola *mundo*')).toEqual({ text: 'Hola *mundo*' });
   });
 });

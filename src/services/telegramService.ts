@@ -1,64 +1,15 @@
-export type TelegramEnvValues = Partial<Record<'VITE_TELEGRAM_BOT_TOKEN' | 'VITE_TELEGRAM_CHAT_ID' | 'TELEGRAM_BOT_TOKEN' | 'TELEGRAM_CHAT_ID', string>>;
+const TELEGRAM_API_URL = '/api/telegram';
 
-export type TelegramConfig = {
-  botToken: string;
-  chatId: string;
-  apiUrl: string;
-};
-
-export function getTelegramConfig(
-  env: TelegramEnvValues | Record<string, string | undefined> = import.meta.env as Record<string, string | undefined>
-): TelegramConfig | null {
-  const useLocalFallback = !!import.meta.env.DEV;
-  const botToken = (env.TELEGRAM_BOT_TOKEN ?? (useLocalFallback ? env.VITE_TELEGRAM_BOT_TOKEN : '') ?? '').trim();
-  const chatId = (env.TELEGRAM_CHAT_ID ?? (useLocalFallback ? env.VITE_TELEGRAM_CHAT_ID : '') ?? '').trim();
-
-  if (!botToken || !chatId) {
-    return null;
-  }
-
-  return {
-    botToken,
-    chatId,
-    apiUrl: '/api/telegram',
-  };
+export function buildTelegramPayload(texto: string) {
+  return { text: texto };
 }
-
-export function buildTelegramPayload(texto: string, chatId?: string) {
-  return {
-    ...(chatId ? { chat_id: chatId } : {}),
-    text: texto,
-  };
-}
-
-export const isTelegramConfigured = Boolean(
-  import.meta.env.TELEGRAM_BOT_TOKEN || import.meta.env.TELEGRAM_CHAT_ID
-);
-
-const getConfiguredTelegramConfig = (): TelegramConfig | null => {
-  const config = getTelegramConfig();
-
-  if (!config) {
-    console.warn(
-      'Telegram no está configurado. Define TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID en Vercel o usa los valores locales para desarrollo.'
-    );
-  }
-
-  return config;
-};
 
 export const enviarNotificacionTelegram = async (texto: string): Promise<boolean> => {
-  const config = getConfiguredTelegramConfig();
-
-  if (!config) {
-    return false;
-  }
-
   try {
-    const response = await fetch(config.apiUrl, {
+    const response = await fetch(TELEGRAM_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(buildTelegramPayload(texto, config.chatId)),
+      body: JSON.stringify(buildTelegramPayload(texto)),
     });
 
     if (!response.ok) {
@@ -75,26 +26,24 @@ export const enviarNotificacionTelegram = async (texto: string): Promise<boolean
 };
 
 export const enviarBeaconTelegram = (texto: string): void => {
-  const config = getConfiguredTelegramConfig();
-
-  if (!config) {
-    return;
-  }
-
-  const payload = JSON.stringify(buildTelegramPayload(texto, config.chatId));
+  const payload = JSON.stringify(buildTelegramPayload(texto));
 
   if (navigator.sendBeacon) {
-    navigator.sendBeacon(
-      config.apiUrl,
+    const queued = navigator.sendBeacon(
+      TELEGRAM_API_URL,
       new Blob([payload], { type: 'application/json' })
     );
-    return;
+
+    if (queued) {
+      return;
+    }
   }
 
-  fetch(config.apiUrl, {
+  fetch(TELEGRAM_API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: payload,
+    keepalive: true,
   }).catch((error) => {
     console.error('Error con fetch fallback de Telegram:', error);
   });
