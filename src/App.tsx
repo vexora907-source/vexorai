@@ -90,7 +90,7 @@ export default function App() {
     pais: '',
     mensaje: '',
   });
-  const { enviarMensajeFormulario, loading, success } = useContacto();
+  const { enviarMensajeFormulario, loading, success, error } = useContacto();
   useWebMetrics();
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export default function App() {
       return;
     }
 
-    await enviarMensajeFormulario(
+    const enviado = await enviarMensajeFormulario(
       formData.nombre.trim(),
       formData.telefono.trim(),
       formData.pais.trim(),
@@ -125,13 +125,15 @@ export default function App() {
       formData.correo.trim(),
     );
 
-    setFormData({
-      nombre: '',
-      correo: '',
-      telefono: '',
-      pais: '',
-      mensaje: '',
-    });
+    if (enviado) {
+      setFormData({
+        nombre: '',
+        correo: '',
+        telefono: '',
+        pais: '',
+        mensaje: '',
+      });
+    }
   };
 
   return (
@@ -315,6 +317,7 @@ export default function App() {
                     <span>Nombre</span>
                     <input
                       type="text"
+                      required
                       placeholder="Tu nombre"
                       value={formData.nombre}
                       onChange={(event) => handleInputChange('nombre', event.target.value)}
@@ -325,6 +328,7 @@ export default function App() {
                     <span>Correo electrónico</span>
                     <input
                       type="email"
+                      required
                       placeholder="tuemail@ejemplo.com"
                       value={formData.correo}
                       onChange={(event) => handleInputChange('correo', event.target.value)}
@@ -337,6 +341,7 @@ export default function App() {
                     <span>Número de contacto</span>
                     <input
                       type="tel"
+                      required
                       placeholder="+57 300 000 0000"
                       value={formData.telefono}
                       onChange={(event) => handleInputChange('telefono', event.target.value)}
@@ -347,6 +352,7 @@ export default function App() {
                     <span>País</span>
                     <input
                       type="text"
+                      required
                       placeholder="Ej. Colombia"
                       value={formData.pais}
                       onChange={(event) => handleInputChange('pais', event.target.value)}
@@ -358,6 +364,7 @@ export default function App() {
                   <span>Describe tu proyecto</span>
                   <textarea
                     rows={5}
+                    required
                     placeholder="Cuéntanos brevemente qué quieres desarrollar y cuál es tu objetivo."
                     value={formData.mensaje}
                     onChange={(event) => handleInputChange('mensaje', event.target.value)}
@@ -369,6 +376,7 @@ export default function App() {
                 </button>
 
                 {success && <p className="form-success">Tu mensaje se envió correctamente.</p>}
+                {error && <p className="form-error" role="alert">{error}</p>}
               </form>
             </section>
           </main>

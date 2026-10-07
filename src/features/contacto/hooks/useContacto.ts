@@ -4,6 +4,7 @@ import { enviarNotificacionTelegram } from '../../../services/telegramService';
 export const useContacto = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const enviarMensajeFormulario = async (
     nombre: string,
@@ -14,6 +15,7 @@ export const useContacto = () => {
   ) => {
     setLoading(true);
     setSuccess(false);
+    setError('');
 
     const textoMensaje = `
 📥 *NUEVO CONTACTO DESDE VEXOR AI*
@@ -25,14 +27,20 @@ export const useContacto = () => {
 "${mensaje}"
     `.trim();
 
-    const resultado = await enviarNotificacionTelegram(textoMensaje);
+    try {
+      const resultado = await enviarNotificacionTelegram(textoMensaje);
 
-    if (resultado) {
-      setSuccess(true);
+      if (resultado) {
+        setSuccess(true);
+        return true;
+      }
+
+      setError('No se pudo enviar tu mensaje. Inténtalo de nuevo más tarde.');
+      return false;
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  return { enviarMensajeFormulario, loading, success };
+  return { enviarMensajeFormulario, loading, success, error };
 };
