@@ -12,11 +12,17 @@ export const useWebMetrics = () => {
   useEffect(() => {
     startTimeRef.current = Date.now();
 
-    const numeroVisitaPromise = fetchVisitCount().then((countValue) => {
-      const visitNumber = String(countValue || '1');
-      sessionInfoRef.current.visitaNro = visitNumber;
-      return visitNumber;
-    });
+    const numeroVisitaPromise = fetchVisitCount()
+      .then((countValue) => {
+        const visitNumber = String(countValue);
+        sessionInfoRef.current.visitaNro = visitNumber;
+        return visitNumber;
+      })
+      .catch((error: unknown) => {
+        console.error('No se pudo registrar la visita:', error);
+        sessionInfoRef.current.visitaNro = 'No disponible';
+        return 'No disponible';
+      });
 
     const ubicacionPromise = fetch('https://ipapi.co/json/')
       .then((response) => response.json())

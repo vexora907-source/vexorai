@@ -5,32 +5,36 @@ export type VisitCountResponse = {
 export function normalizeVisitValue(data: VisitCountResponse = {}): number {
   const rawValue = data.value;
 
-  if (typeof rawValue === 'number' && Number.isFinite(rawValue)) {
+  if (typeof rawValue === 'number' && Number.isSafeInteger(rawValue) && rawValue >= 0) {
     return rawValue;
   }
 
   if (typeof rawValue === 'string') {
     const parsed = Number(rawValue);
-    if (Number.isFinite(parsed)) {
+    if (Number.isSafeInteger(parsed) && parsed >= 0) {
       return parsed;
     }
   }
 
-  return 1;
+  throw new Error('El contador de visitas devolvió un valor no válido.');
 }
 
-export async function fetchVisitCount(): Promise<number> {
-  try {
-    const response = await fetch('https://api.countapi.xyz/hit/vexora-ai-portfolio/visits');
+let visitCountRequest: Promise<number> | undefined;
 
-    if (!response.ok) {
-      throw new Error(`Error al consultar el contador: ${response.status}`);
-    }
-
-    const data = (await response.json()) as VisitCountResponse;
-    return normalizeVisitValue(data);
-  } catch (error) {
-    console.error('No se pudo obtener el contador de visitas:', error);
-    return 1;
+export function fetchVisitCount(fetcher: typeof fetch = fetch): Promise<number> {
+  if (!visitCountRequest) {
+    visitCountRequest = fetcher('/api/visits', { method: 'POST' })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`No se pudo registrar la visita (${response.status}).`);
+        }
+        return normalizeVisitValue((await response.json()) as VisitCountResponse);
+      })
+      .catch((error: unknown) => {
+        visitCountRequest = undefined;
+        throw error;
+      });
   }
+
+  return visitCountRequest;
 }

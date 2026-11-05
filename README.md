@@ -27,3 +27,8 @@ Telegram notifications:
 
 - Configure `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` as server-side environment variables in Vercel.
 - Do not use the `VITE_` prefix for these credentials; the browser sends notifications through `/api/telegram` and must not receive the bot token.
+
+Website visit counter:
+
+- Configure `POS_API_URL` and `CRM_INTEGRATION_SECRET` as server-side Vercel environment variables. `CRM_INTEGRATION_SECRET` must match the value configured in the POS backend.
+- The browser records visits through `/api/visits`; this serverless endpoint signs the request and sends it to the POS backend.
