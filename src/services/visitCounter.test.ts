@@ -13,7 +13,7 @@ describe('visitCounter', () => {
     expect(() => normalizeVisitValue({ value: 1.5 })).toThrow(/valor no válido/);
   });
 
-  it('records a visit once per page load through the same-origin API', async () => {
+  it('records a visit once per page load through the POS API', async () => {
     const fetcher = vi.fn(async () => ({
       ok: true,
       json: async () => ({ value: 43 }),
@@ -22,6 +22,13 @@ describe('visitCounter', () => {
     await expect(fetchVisitCount(fetcher)).resolves.toBe(43);
     await expect(fetchVisitCount(fetcher)).resolves.toBe(43);
     expect(fetcher).toHaveBeenCalledOnce();
-    expect(fetcher).toHaveBeenCalledWith('/api/visits', { method: 'POST' });
+    expect(fetcher).toHaveBeenCalledWith(
+      'http://localhost:3000/api/public/metrics/visits',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}',
+      },
+    );
   });
 });

@@ -30,5 +30,6 @@ Telegram notifications:
 
 Website visit counter:
 
-- Configure `POS_API_URL` and `CRM_INTEGRATION_SECRET` as server-side Vercel environment variables. `CRM_INTEGRATION_SECRET` must match the value configured in the POS backend.
-- The browser records visits through `/api/visits`; this serverless endpoint signs the request and sends it to the POS backend.
+- The site records visits directly through the public, rate-limited POS endpoint. Production uses `https://backend-vexora-pos-jkc6.vercel.app` by default.
+- For another POS backend, configure the build-time `VITE_API_URL` with its origin (without `/api`). The POS backend must allow the public site's exact origin in `CORS_ORIGIN`.
+- CRM reads the total separately through its private, HMAC-signed integration; the CRM secret is never sent to the browser.
