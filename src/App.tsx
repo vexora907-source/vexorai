@@ -5,6 +5,8 @@ import autojobProject from './assets/images/autojob-proyecto.png';
 import autojobDiagrama from './assets/images/autojob-diagrama.svg';
 import papelcolorProject from './assets/images/papelcolor-proyecto.png';
 import papelcolorDiagrama from './assets/images/papelcolor-diagrama.svg';
+import vexoraPosCapture from './assets/images/vexora-pos-captura.png';
+import papelcolorPosCapture from './assets/images/papelcolor-pos-captura.png';
 import { useWebMetrics } from './hooks/useWebMetrics';
 import { useContacto } from './features/contacto/hooks/useContacto';
 import { JsonLd } from './components/Seo/JsonLd';
@@ -216,6 +218,26 @@ export default function App() {
                     <p>{project.summary}</p>
                   </article>
                 ))}
+              </div>
+
+              <div className="pos-project-grid">
+                <article className="pos-project-card">
+                  <img src={vexoraPosCapture} alt="Captura del sistema POS Vexora" className="pos-project-image" />
+                  <div className="pos-project-copy">
+                    <span className="eyebrow">Sistema POS</span>
+                    <h3>Vexora POS</h3>
+                    <p>Plataforma web para ventas, inventario, usuarios y operación comercial. Incluye entorno adaptable a negocios de papelería, ferretería, restaurantes, cerrajería, tiendas y ventas de ropa.</p>
+                  </div>
+                </article>
+
+                <article className="pos-project-card">
+                  <img src={papelcolorPosCapture} alt="Captura del sistema comercial PapelColor POS" className="pos-project-image" />
+                  <div className="pos-project-copy">
+                    <span className="eyebrow">Comercio digital</span>
+                    <h3>PapelColor POS</h3>
+                    <p>Sistema de gestión diseñado para ventas, inventario, impresión, catálogo comercial y control operativo de una papelería, con experiencia visual enfocada en productividad.</p>
+                  </div>
+                </article>
               </div>
 
               <div className="project-feature">
