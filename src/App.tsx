@@ -231,11 +231,11 @@ export default function App() {
                 </article>
 
                 <article className="pos-project-card">
-                  <img src={papelcolorPosCapture} alt="Captura del sistema comercial PapelColor POS" className="pos-project-image" />
+                  <img src={papelcolorPosCapture} alt="Panel operativo de administración e inventario de PapelColor OS" className="pos-project-image" />
                   <div className="pos-project-copy">
-                    <span className="eyebrow">Comercio digital</span>
-                    <h3>PapelColor POS</h3>
-                    <p>Sistema de gestión diseñado para ventas, inventario, impresión, catálogo comercial y control operativo de una papelería, con experiencia visual enfocada en productividad.</p>
+                    <span className="eyebrow">Sistema operativo comercial</span>
+                    <h3>PapelColor OS</h3>
+                    <p>Panel administrativo para ventas, inventario, pedidos, impresión, catálogo y control operativo de una papelería. Integra indicadores comerciales y gestión centralizada del negocio.</p>
                   </div>
                 </article>
               </div>
