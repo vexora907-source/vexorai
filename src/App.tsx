@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { WelcomeSplash } from './components/common/WelcomeSplash';
 import logoVexor from './assets/images/logo-Vexor.png';
 import autojobProject from './assets/images/autojob-proyecto.png';
 import autojobDiagrama from './assets/images/autojob-diagrama.svg';
@@ -82,8 +81,8 @@ const seoSchema = {
   ],
 };
 
-export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
+export function LegacyApp() {
+  const [showSplash, setShowSplash] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [formData, setFormData] = useState({
     nombre: '',
@@ -142,10 +141,7 @@ export default function App() {
     <>
       <JsonLd data={seoSchema} />
       <div className="app-shell">
-        {showSplash ? (
-          <WelcomeSplash onAnimationComplete={() => setShowSplash(false)} />
-        ) : (
-          <div className="app-main-shell">
+        <div className="app-main-shell">
             <header className="topbar">
               <div className="brand-wrap">
                 <img src={logoVexor} alt="Logo de VexoraIA - automatización ejecutiva con IA" className="brand-logo" />
@@ -407,8 +403,9 @@ export default function App() {
             <p>VexoraIA © {new Date().getFullYear()} · Automatización ejecutiva con IA para empresas.</p>
           </footer>
         </div>
-      )}
     </div>
     </>
   );
 }
+
+export { default } from './components/VexoraProfessionalPortfolio';
