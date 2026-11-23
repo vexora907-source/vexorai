@@ -58,7 +58,7 @@ describe('App contact form', () => {
       await Promise.resolve();
     });
 
-    expect(enviarMensajeFormulario).toHaveBeenCalledWith('Ana', '+57 300 000 0000', 'Colombia', 'Necesito una app', 'ana@email.com');
+    expect(enviarMensajeFormulario).toHaveBeenCalledWith('Ana', '+57 300 000 0000', 'Colombia', 'Necesito una app', 'ana@email.com', 'Portafolio / Negocio');
   });
 
   it('keeps the form data when sending fails', async () => {

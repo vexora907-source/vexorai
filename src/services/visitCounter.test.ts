@@ -23,7 +23,7 @@ describe('visitCounter', () => {
     await expect(fetchVisitCount(fetcher)).resolves.toBe(43);
     expect(fetcher).toHaveBeenCalledOnce();
     expect(fetcher).toHaveBeenCalledWith(
-      'http://localhost:3000/api/public/metrics/visits',
+      'http://localhost:3000/api/metrics/visits',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

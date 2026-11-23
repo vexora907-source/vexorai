@@ -124,6 +124,7 @@ export function LegacyApp() {
       formData.pais.trim(),
       formData.mensaje.trim(),
       formData.correo.trim(),
+      'Consulta general',
     );
 
     if (enviado) {

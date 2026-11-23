@@ -11,7 +11,8 @@ export const useContacto = () => {
     telefono: string,
     pais: string,
     mensaje: string,
-    correo: string
+    correo: string,
+    tipoProyecto = 'No especificado'
   ) => {
     setLoading(true);
     setSuccess(false);
@@ -23,7 +24,8 @@ export const useContacto = () => {
 📧 Correo: *${correo}*
 📱 Teléfono: *${telefono}*
 🌍 País: *${pais}*
-💬 Proyecto:
+🧩 Tipo de proyecto: *${tipoProyecto}*
+💬 Detalle:
 "${mensaje}"
     `.trim();
 

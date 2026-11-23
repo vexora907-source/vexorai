@@ -12,25 +12,29 @@ export const useWebMetrics = () => {
   useEffect(() => {
     startTimeRef.current = Date.now();
 
-    const numeroVisitaPromise = fetchVisitCount()
-      .then((countValue) => {
-        const visitNumber = String(countValue);
-        sessionInfoRef.current.visitaNro = visitNumber;
-        return visitNumber;
-      })
-      .catch((error: unknown) => {
-        console.error('No se pudo registrar la visita:', error);
-        sessionInfoRef.current.visitaNro = 'No disponible';
-        return 'No disponible';
-      });
+    const numeroVisitaPromise = Promise.race([
+      fetchVisitCount()
+        .then((countValue) => {
+          const visitNumber = String(countValue);
+          sessionInfoRef.current.visitaNro = visitNumber;
+          return visitNumber;
+        }),
+      new Promise<string>((resolve) => window.setTimeout(() => resolve('No disponible'), 5000)),
+    ]).catch((error: unknown) => {
+      console.error('No se pudo registrar la visita:', error);
+      sessionInfoRef.current.visitaNro = 'No disponible';
+      return 'No disponible';
+    });
 
-    const ubicacionPromise = fetch('https://ipapi.co/json/')
-      .then((response) => response.json())
-      .then((ipData) => `📍 ${ipData.city || 'Desconocida'}, ${ipData.country_name || 'País no disponible'}`)
-      .catch((error) => {
-        console.error('No se pudo obtener la ubicación del visitante:', error);
-        return 'Desconocida o filtrada';
-      });
+    const ubicacionPromise = Promise.race([
+      fetch('https://ipapi.co/json/')
+        .then((response) => response.json())
+        .then((ipData) => `📍 ${ipData.city || 'Desconocida'}, ${ipData.country_name || 'País no disponible'}`),
+      new Promise<string>((resolve) => window.setTimeout(() => resolve('Desconocida o filtrada'), 4000)),
+    ]).catch((error) => {
+      console.error('No se pudo obtener la ubicación del visitante:', error);
+      return 'Desconocida o filtrada';
+    });
 
     const registrarEntrada = async () => {
       const [visitNumber, ubicacion] = await Promise.all([numeroVisitaPromise, ubicacionPromise]);

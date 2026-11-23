@@ -124,7 +124,7 @@ export default function VexoraProfessionalPortfolio() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!form.nombre.trim() || !form.correo.trim() || !form.telefono.trim() || !form.pais.trim() || !form.mensaje.trim()) return;
-    const enviado = await enviarMensajeFormulario(form.nombre.trim(), form.telefono.trim(), form.pais.trim(), form.mensaje.trim(), form.correo.trim());
+    const enviado = await enviarMensajeFormulario(form.nombre.trim(), form.telefono.trim(), form.pais.trim(), form.mensaje.trim(), form.correo.trim(), form.proyecto);
     if (enviado) setForm({ nombre: '', correo: '', telefono: '', pais: '', mensaje: '', proyecto: 'Portafolio / Negocio' });
   };
 

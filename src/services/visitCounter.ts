@@ -2,8 +2,8 @@ export type VisitCountResponse = {
   value?: number | string;
 };
 
-const POS_API_URL = import.meta.env.VITE_API_URL
-  || (import.meta.env.PROD ? 'https://backend-vexora-pos-jkc6.vercel.app' : '');
+const VISIT_API_URL = import.meta.env.VITE_VISIT_API_URL
+  || (import.meta.env.PROD ? '/api/metrics/visits' : '/api/metrics/visits');
 
 export function normalizeVisitValue(data: VisitCountResponse = {}): number {
   const rawValue = data.value;
@@ -26,7 +26,7 @@ let visitCountRequest: Promise<number> | undefined;
 
 export function fetchVisitCount(fetcher: typeof fetch = fetch): Promise<number> {
   if (!visitCountRequest) {
-    const url = new URL('/api/public/metrics/visits', POS_API_URL || window.location.origin).toString();
+    const url = new URL(VISIT_API_URL, window.location.origin).toString();
     visitCountRequest = fetcher(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
